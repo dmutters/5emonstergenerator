@@ -198,7 +198,7 @@ def print_stats():
             DC = 11 + 1 / 2 * CR
             Save = 3 + 1 / 2 * CR
             AverageSave = 1 / 2 * CR - 1
-        elif current_cr > 2:
+        elif current_cr > 7:
             CR = current_cr
             AC = 13 + 1 / 3 * CR
             HP = 15 * CR
