@@ -2,6 +2,7 @@
 Scripts for generating Dungeons and Dragons 5th Edition monster stats.
 
 # INSTALLATION
+The scripts are designed to work on any OS that has Python 3 and standard libraries installed, along with the "Colorama" module for text colorization.  Install these dependencies, as below, then run the Python scripts in the usual way.
 
 ## INSTALL PYTHON3 AND THE COLORAMA MODULE
 
