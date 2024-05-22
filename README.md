@@ -29,9 +29,11 @@ These scripts are designed to work on any OS that has Python 3 and standard libr
 Use the system package manager to install Python 3 and the colorama module.
 On Ubuntu:
 
-```sudo apt update && sudo apt install python3```
+```
+sudo apt update && sudo apt install python3
+pip install colorama
+```
 
-pip install colorama```
 Make the script executable:
 
 ```chmod +x monstergenerator.py```
