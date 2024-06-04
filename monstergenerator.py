@@ -224,6 +224,8 @@ def print_stats():
         print ("Save DC =", roundhalf(DC), "(+/-) 2")
         print ("Good Save/Skill Bonus =", roundhalf(GoodSave), "(+/-) 1")
         print ("Average Save/Skill Bonus =", roundhalf(AverageSave), "(+/-) 1\n")
+
+        print(Fore.YELLOW + "Bad ability scores are not implemented and automatically have scores of \"1\"." + Style.RESET_ALL)
         print ("Strength = ", Strength, " (", Strength_mod, ")       ", "(+/-) 2 (1)", sep='')
         print ("Dexterity = ", Dexterity, " (", Dexterity_mod, ")      ", "(+/-) 2 (1)", sep='')
         print ("Constitution = ", Constitution, " (", Constitution_mod, ")   ", "(+/-) 2 (1)", sep='')
