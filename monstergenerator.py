@@ -96,7 +96,7 @@ if cr_range > 20:
         exit(1)
 
 # TODO: Let user specify good/average/bad ability scores
-# TODO: do statistical analysis to determine typical values of bad/average/good ability scores at each CR
+# TODO: do statistical analysis to determine typical values of bad ability scores at each CR
 def assign_ability_scores(ability):
     print (Fore.GREEN + "\nChoose whether", ability, "will be good, average, or bad." + Style.RESET_ALL)
     print ("1. Bad")
@@ -114,37 +114,11 @@ def assign_ability_scores(ability):
         exit(1)
     if goodness == 1:
         print(ability, "will be Bad.\n")
-        ability = 5
     if goodness == 2:
         print(ability, "will be Average.\n")
-        ability = 10
     if goodness == 3:
         print(ability, "will be Good.\n")
-        ability = 15
-    return ability
-
-Strength = assign_ability_scores("Strength")
-Dexterity = assign_ability_scores("Dexterity")
-Constitution = assign_ability_scores("Constitution")
-Intelligence = assign_ability_scores("Intelligence")
-Wisdom = assign_ability_scores("Wisdom")
-Charisma = assign_ability_scores("Charisma")
-
-print("This feature has not yet been implemented.  Ignore these ability scores.")
-print("PLACEHOLDER Strength = ", Strength)
-print("PLACEHOLDER Dexterity = ", Dexterity)
-print("PLACEHOLDER Constitution = ", Constitution)
-print("PLACEHOLDER Intelligence = ", Intelligence)
-print("PLACEHOLDER Wisdom = ", Wisdom)
-print("PLACEHOLDER Charisma = ", Charisma)
-
-
-    
-    
-    
-
-
-
+    return goodness
 
 
 # TODO: separate variable creation from printing; use loops on function calls instead.  
@@ -152,6 +126,12 @@ print("PLACEHOLDER Charisma = ", Charisma)
 # Define variables, print results
 def print_stats():
     current_cr = low_cr
+    Strength_goodness = assign_ability_scores("Strength")
+    Dexterity_goodness = assign_ability_scores("Dexterity")
+    Constitution_goodness = assign_ability_scores("Constitution")
+    Intelligence_goodness = assign_ability_scores("Intelligence")
+    Wisdom_goodness = assign_ability_scores("Wisdom")
+    Charisma_goodness = assign_ability_scores("Charisma")
     print("\nGenerating...")
     print("\n----------------------------------------\n")
     while current_cr <= high_cr:
@@ -164,7 +144,7 @@ def print_stats():
             Attack = 4
             Damage = 10
             DC = 11
-            Save = 3
+            GoodSave = 3
             AverageSave = 0
         elif 2 <= current_cr <= 7:
             CR = current_cr
@@ -174,7 +154,7 @@ def print_stats():
             Attack = 4 + 1 / 2 * CR
             Damage = 5 * CR + 5
             DC = 11 + 1 / 2 * CR
-            Save = 3 + 1 / 2 * CR
+            GoodSave = 3 + 1 / 2 * CR
             AverageSave = 1 / 2 * CR - 1
         elif current_cr > 7:
             CR = current_cr
@@ -184,8 +164,54 @@ def print_stats():
             Attack = 4 + 1 / 2 * CR
             Damage = 5 * CR
             DC = 11 + 1 / 2 * CR
-            Save = 3 + 1 / 2 * CR
+            GoodSave = 3 + 1 / 2 * CR
             AverageSave = 1 / 2 * CR - 1
+        # Placeholder for Bad abilility scores
+        if Strength_goodness == 1:
+            Strength = roundhalf(1)
+        if Dexterity_goodness == 1:
+            Dexterity = roundhalf(1)
+        if Constitution_goodness == 1:
+            Constitution = roundhalf(1)
+        if Intelligence_goodness == 1:
+            Intelligence = roundhalf(1)
+        if Wisdom_goodness == 1:
+            Wisdom = roundhalf(1)
+        if Charisma_goodness == 1:
+            Charisma = roundhalf(1)
+        # Define Average Ability Scores
+        if Strength_goodness == 2:
+            Strength = (roundhalf(AverageSave) - roundhalf(Proficiency)) * 2 + 10
+        if Dexterity_goodness == 2:
+            Dexterity = (roundhalf(AverageSave) - roundhalf(Proficiency)) * 2 + 10
+        if Constitution_goodness == 2:
+            Constitution = (roundhalf(AverageSave) - roundhalf(Proficiency)) * 2 + 10
+        if Intelligence_goodness == 2:
+            Intelligence = (roundhalf(AverageSave) - roundhalf(Proficiency)) * 2 + 10
+        if Wisdom_goodness == 2:
+            Wisdom = (roundhalf(AverageSave) - roundhalf(Proficiency)) * 2 + 10
+        if Charisma_goodness == 2:
+            Charisma = (roundhalf(AverageSave) - roundhalf(Proficiency)) * 2 + 10
+        # Define Good Ability Scores 
+        if Strength_goodness == 3:
+            Strength = (roundhalf(GoodSave) - roundhalf(Proficiency)) * 2 + 10
+        if Dexterity_goodness == 3:
+            Dexterity = (roundhalf(GoodSave) - roundhalf(Proficiency)) * 2 + 10
+        if Constitution_goodness == 3:
+            Constitution = (roundhalf(GoodSave) - roundhalf(Proficiency)) * 2 + 10
+        if Intelligence_goodness == 3:
+            Intelligence = (roundhalf(GoodSave) - roundhalf(Proficiency)) * 2 + 10
+        if Wisdom_goodness == 3:
+            Wisdom = (roundhalf(GoodSave) - roundhalf(Proficiency)) * 2 + 10
+        if Charisma_goodness == 3:
+            Charisma = (roundhalf(GoodSave) - roundhalf(Proficiency)) * 2 + 10
+        # Define Ability Score Modifiers
+        Strength_mod = math.floor((Strength - 10) / 2)
+        Dexterity_mod = math.floor((Dexterity - 10) / 2)
+        Constitution_mod = math.floor((Constitution - 10) / 2)
+        Intelligence_mod = math.floor((Intelligence - 10) / 2)
+        Wisdom_mod = math.floor((Wisdom - 10) / 2)
+        Charisma_mod = math.floor((Charisma - 10) / 2)
 
         print ("\nAC =", roundhalf(AC), "(+/-) 3")
         print ("HP =", roundhalf(HP), "(+/-)", roundhalf(.5 * HP))
@@ -196,8 +222,14 @@ def print_stats():
         print ("Single-Target Limited-Use Attack = ", roundhalf(4 * Damage), "(+/-)", roundhalf(2 * Damage))
         print ("Multi-Target Limited-Use Attack = ", roundhalf(2* Damage), "(+/-)", roundhalf(Damage))
         print ("Save DC =", roundhalf(DC), "(+/-) 2")
-        print ("Good Save/Skill Bonus =", roundhalf(Save), "(+/-) 1")
-        print ("Average Save/Skill Bonus =", roundhalf(AverageSave), "(+/-) 1")
+        print ("Good Save/Skill Bonus =", roundhalf(GoodSave), "(+/-) 1")
+        print ("Average Save/Skill Bonus =", roundhalf(AverageSave), "(+/-) 1\n")
+        print ("Strength = ", Strength, " (", Strength_mod, ")       ", "(+/-) 2 (1)", sep='')
+        print ("Dexterity = ", Dexterity, " (", Dexterity_mod, ")      ", "(+/-) 2 (1)", sep='')
+        print ("Constitution = ", Constitution, " (", Constitution_mod, ")   ", "(+/-) 2 (1)", sep='')
+        print ("Intelligence = ", Intelligence, " (", Intelligence_mod, ")   ", "(+/-) 2 (1)", sep='')
+        print ("Wisdom = ", Wisdom, " (", Wisdom_mod, ")         ", "(+/-) 2 (1)", sep='')
+        print ("Charisma = ", Charisma, " (", Charisma_mod, ")       ", "(+/-) 2 (1)", sep='')
         print ("\n----------------------------------------\n")
 
         current_cr += 1
