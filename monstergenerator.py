@@ -48,7 +48,7 @@ print (Fore.CYAN + "https://www.blogofholding.com/?p=7338\n" + Style.RESET_ALL)
 print (Fore.YELLOW + "A NOTE ABOUT SAVE/SKILL BONUSES:" + Style.RESET_ALL)
 print ("-\"Good Save/Skill Bonus\" is the best save/skill bonus the monster has.")
 print ("-\"Average Save/Skill Bonus\" is a very rough estimate of most other saves/skills\nfor the monster.")
-print ("-Most monsters have one or more \"Bad\" saves/skills.  How many they have and how\nbad they are is completely arbitrary.  In general, lower-CR monsters have a lot\nof bad saves/skills while higher-CR monsters have one or two.  This generator\nwill not attempt to calculate \"Bad\" saves/skills.\n")
+print ("-Most monsters have one or more \"Bad\" saves/skills.  How many they have and how\nbad they are is completely arbitrary.  In general, lower-CR monsters have a lot\nof bad saves/skills while higher-CR monsters have one or two.  This generator\nwill calculate approximate \"Bad\" saves/skills.\n")
 
 # TODO: Ask user whether to output to stdout, text file, or spreadsheet file (ods)
 # TODO: If user chooses output to file, ask for location (default ./)
