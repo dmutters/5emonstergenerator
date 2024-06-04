@@ -96,8 +96,7 @@ if cr_range > 20:
         exit(1)
 
 # Let user specify good/average/bad ability scores
-# TODO: ask user whether each score has save proficiency and calculate results
-# TODO: do statistical analysis to determine typical values of bad ability scores at each CR
+# TODO: Ask user whether each score has save proficiency and calculate results
 def assign_ability_scores(ability):
     print (Fore.GREEN + "\nChoose whether", ability, "will be good, average, or bad." + Style.RESET_ALL)
     print ("1. Bad")
@@ -169,17 +168,17 @@ def print_stats():
             AverageSave = 1 / 2 * CR - 1
         # Placeholder for Bad abilility scores
         if Strength_goodness == 1:
-            Strength = roundhalf(1)
+            Strength = roundhalf(.48 * CR + 3.52)
         if Dexterity_goodness == 1:
-            Dexterity = roundhalf(1)
+            Dexterity = roundhalf(.48 * CR + 3.52)
         if Constitution_goodness == 1:
-            Constitution = roundhalf(1)
+            Constitution = roundhalf(.48 * CR + 3.52)
         if Intelligence_goodness == 1:
-            Intelligence = roundhalf(1)
+            Intelligence = roundhalf(.48 * CR + 3.52)
         if Wisdom_goodness == 1:
-            Wisdom = roundhalf(1)
+            Wisdom = roundhalf(.48 * CR + 3.52)
         if Charisma_goodness == 1:
-            Charisma = roundhalf(1)
+            Charisma = roundhalf(.48 * CR + 3.52)
         # Define Average Ability Scores
         if Strength_goodness == 2:
             Strength = (roundhalf(AverageSave) - roundhalf(Proficiency)) * 2 + 10
@@ -226,7 +225,7 @@ def print_stats():
         print ("Good Save/Skill Bonus =", roundhalf(GoodSave), "(+/-) 1")
         print ("Average Save/Skill Bonus =", roundhalf(AverageSave), "(+/-) 1\n")
 
-        print(Fore.YELLOW + "Bad ability scores are not implemented and automatically have scores of \"1\"." + Style.RESET_ALL)
+        print(Fore.YELLOW + "Bad ability scores are arbitrary.  This is only a suggestion." + Style.RESET_ALL)
         print ("Strength = ", Strength, " (", Strength_mod, ")       ", "(+/-) 2 (1)", sep='')
         print ("Dexterity = ", Dexterity, " (", Dexterity_mod, ")      ", "(+/-) 2 (1)", sep='')
         print ("Constitution = ", Constitution, " (", Constitution_mod, ")   ", "(+/-) 2 (1)", sep='')
