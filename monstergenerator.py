@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 
+# Future feature: export to text file
+# Future feature: detect and offer to rename existing files
+
 # Future feature: export to ODS with nice formatting
 #import pandas
-# Future feature: detect and offer to rename existing files
+
 import sys
 import signal
 import math
@@ -52,6 +55,8 @@ print ("-Most monsters have one or more \"Bad\" saves/skills.  How many they hav
 # TODO: Detect existing file and ask user whether to move them or overwrite
 
 # Get desired monster generation range
+# TODO: implement CR 0, 1/8, 1/4, and 1/2
+
 try:
     low_cr = int(input(Fore.GREEN + "Enter the lowest challenge rating (CR) you want to generate statistics for:\n" + Style.RESET_ALL))
 except ValueError:
@@ -90,83 +95,56 @@ if cr_range > 20:
         print ("\nExiting.\n")
         exit(1)
 
-def map_ability(ability_int):
-    global ability
-    if ability_int == 1:
-        ability = "Strength"
-    if ability_int == 2:
-        ability = "Dexterity"
-    if ability_int == 3:
-        ability = "Constitution"
-    if ability_int == 4:
-        ability = "Intelligence"
-    if ability_int == 5:
-        ability = "Wisdom"
-    if ability_int == 6:
-        ability = "Charisma"
+# TODO: Let user specify good/average/bad ability scores
+# TODO: do statistical analysis to determine typical values of bad/average/good ability scores at each CR
+def assign_ability_scores(ability):
+    print (Fore.GREEN + "\nChoose whether", ability, "will be good, average, or bad." + Style.RESET_ALL)
+    print ("1. Bad")
+    print ("2. Average")
+    print ("3. Good")
+    try:
+        goodness = int(input(Fore.GREEN + "Your choice (1-3): " + Style.RESET_ALL))
+    except ValueError:
+        print (Fore.RED + "\nPlease choose a number 1, 2, or 3." + Style.RESET_ALL)
+        print ("Exiting.")
+        exit(1)
+    if goodness < 1 or goodness > 3:
+        print (Fore.RED + "\nPlease choose a number 1, 2, or 3." + Style.RESET_ALL)
+        print ("Exiting.")
+        exit(1)
+    if goodness == 1:
+        print(ability, "will be Bad.\n")
+        ability = 5
+    if goodness == 2:
+        print(ability, "will be Average.\n")
+        ability = 10
+    if goodness == 3:
+        print(ability, "will be Good.\n")
+        ability = 15
+    return ability
 
-# TODO: Make questions about primary/secondary/worst ability scores a loop function
-# TODO: Figure out how to use the results of these questions to do different math on those scores.
+Strength = assign_ability_scores("Strength")
+Dexterity = assign_ability_scores("Dexterity")
+Constitution = assign_ability_scores("Constitution")
+Intelligence = assign_ability_scores("Intelligence")
+Wisdom = assign_ability_scores("Wisdom")
+Charisma = assign_ability_scores("Charisma")
 
-print (Fore.GREEN + "\nEnter the number for the monster's PRIMARY ability score:")
-print ("1. Strength")
-print ("2. Dexterity")
-print ("3. Constitution")
-print ("4. Intelligence")
-print ("5. Wisdom")
-print ("6. Charisma" + Style.RESET_ALL)
+print("This feature has not yet been implemented.  Ignore these ability scores.")
+print("PLACEHOLDER Strength = ", Strength)
+print("PLACEHOLDER Dexterity = ", Dexterity)
+print("PLACEHOLDER Constitution = ", Constitution)
+print("PLACEHOLDER Intelligence = ", Intelligence)
+print("PLACEHOLDER Wisdom = ", Wisdom)
+print("PLACEHOLDER Charisma = ", Charisma)
 
-try:
-    ability_int = int(input("Primary Ability Score: "))
-except ValueError:
-    print (Fore.RED + "Please enter a number between 1 and 6." + Style.RESET_ALL)
-    print ("Exiting.")
-    exit(1)
 
-map_ability(ability_int)
-primary_ability = ability
+    
+    
+    
 
-print ("Primary ability score is", primary_ability)
 
-print (Fore.GREEN + "\nEnter the number for the monster's SECONDARY ability score:")
-print ("1. Strength")
-print ("2. Dexterity")
-print ("3. Constitution")
-print ("4. Intelligence")
-print ("5. Wisdom")
-print ("6. Charisma" + Style.RESET_ALL)
 
-try:
-    ability_int = int(input("Secondary Ability Score: "))
-except ValueError:
-    print (Fore.RED + "Please enter a number between 1 and 6." + Style.RESET_ALL)
-    print ("Exiting.")
-    exit(1)
-
-map_ability(ability_int)
-secondary_ability = ability
-
-print ("Secondary Ability Score is", secondary_ability)
-
-print (Fore.GREEN + "\nEnter the number for the monster's WORST ability score:")
-print ("1. Strength")
-print ("2. Dexterity")
-print ("3. Constitution")
-print ("4. Intelligence")
-print ("5. Wisdom")
-print ("6. Charisma" + Style.RESET_ALL)
-
-try:
-    ability_int = int(input("Worst Ability Score: "))
-except ValueError:
-    print (Fore.RED + "Please enter a number between 1 and 6." + Style.RESET_ALL)
-    print ("Exiting.")
-    exit(1)
-
-map_ability(ability_int)
-worst_ability = ability
-
-print ("Worst Ability Score is", worst_ability)
 
 
 # TODO: separate variable creation from printing; use loops on function calls instead.  
@@ -213,7 +191,10 @@ def print_stats():
         print ("HP =", roundhalf(HP), "(+/-)", roundhalf(.5 * HP))
         print ("Proficiency Bonus =", Proficiency)
         print ("Attack Bonus =", roundhalf(Attack), "(+/-) 2")
-        print ("Damage Per Round =", roundhalf(Damage), "(+/-)", roundhalf(.5 * Damage))
+        print ("Damage Per Round (one attack or multiattack total) =", roundhalf(Damage), "(+/-)", roundhalf(.5 * Damage))
+        print ("Multi-Target Attack (one attack or multiattack total) = ", roundhalf(.5 * Damage), "(+/-)", roundhalf(.25 * Damage))
+        print ("Single-Target Limited-Use Attack = ", roundhalf(4 * Damage), "(+/-)", roundhalf(2 * Damage))
+        print ("Multi-Target Limited-Use Attack = ", roundhalf(2* Damage), "(+/-)", roundhalf(Damage))
         print ("Save DC =", roundhalf(DC), "(+/-) 2")
         print ("Good Save/Skill Bonus =", roundhalf(Save), "(+/-) 1")
         print ("Average Save/Skill Bonus =", roundhalf(AverageSave), "(+/-) 1")
