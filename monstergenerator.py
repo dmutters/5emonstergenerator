@@ -95,7 +95,8 @@ if cr_range > 20:
         print ("\nExiting.\n")
         exit(1)
 
-# TODO: Let user specify good/average/bad ability scores
+# Let user specify good/average/bad ability scores
+# TODO: ask user whether each score has save proficiency and calculate results
 # TODO: do statistical analysis to determine typical values of bad ability scores at each CR
 def assign_ability_scores(ability):
     print (Fore.GREEN + "\nChoose whether", ability, "will be good, average, or bad." + Style.RESET_ALL)
