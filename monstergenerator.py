@@ -49,7 +49,7 @@ print (Fore.YELLOW + "A NOTE ABOUT SAVE/SKILL BONUSES:" + Style.RESET_ALL)
 print ("-\"Good Save/Skill Bonus\" is the best save/skill bonus the monster has.")
 print ("-\"Average Save/Skill Bonus\" is a very rough estimate of most other saves/skills\nfor the monster.")
 print ("-Most monsters have one or more \"Bad\" saves/skills.  How many they have and how\nbad they are is completely arbitrary.  In general, lower-CR monsters have a lot\nof bad saves/skills while higher-CR monsters have one or two.  This generator\nwill calculate approximate \"Bad\" saves/skills.")
-print ("-To determine a skill's total bonus, simply add the Proficiency bonus to the associated Ability Score.\n")
+print ("-To determine a skill's total bonus, simply add the Proficiency bonus to the \nassociated Ability Score.\n")
 
 # TODO: Ask user whether to output to stdout, text file, or spreadsheet file (ods)
 # TODO: If user chooses output to file, ask for location (default ./)
@@ -98,7 +98,7 @@ if cr_range > 20:
 
 # Let user specify good/average/bad ability scores
 def assign_ability_scores(ability):
-    print (Fore.GREEN + "\nChoose whether", ability, "will be good, average, or bad." + Style.RESET_ALL)
+    print (Fore.GREEN + "\nChoose whether", ability, "will be bad, average, or good." + Style.RESET_ALL)
     print ("1. Bad")
     print ("2. Average")
     print ("3. Good")
@@ -120,6 +120,13 @@ def assign_ability_scores(ability):
         print(ability, "will be Good.\n")
     return goodness
 
+Strength_goodness = assign_ability_scores("Strength")
+Dexterity_goodness = assign_ability_scores("Dexterity")
+Constitution_goodness = assign_ability_scores("Constitution")
+Intelligence_goodness = assign_ability_scores("Intelligence")
+Wisdom_goodness = assign_ability_scores("Wisdom")
+Charisma_goodness = assign_ability_scores("Charisma")
+
 # Ask whether each ability score has saving throw proficiency.
 def proficiency(ability):
     prof = str(input(Fore.GREEN + "\nWill " + ability + " have saving throw proficiency? (Y/N) " + Style.RESET_ALL))
@@ -129,18 +136,22 @@ def proficiency(ability):
         exit(1)        
     return prof.lower()
 
+Strength_prof = proficiency("Strength")
+Dexterity_prof = proficiency("Dexterity")
+Constitution_prof = proficiency("Constitution")
+Intelligence_prof = proficiency("Intelligence")
+Wisdom_prof = proficiency("Wisdom")
+Charisma_prof = proficiency("Charisma")
+
 
 # TODO: separate variable creation from printing; use loops on function calls instead.  
 
 # Define variables, print results
+print("\nGenerating...")
+print("\n----------------------------------------\n")
+
 def print_stats():
     current_cr = low_cr
-    Strength_goodness = assign_ability_scores("Strength")
-    Dexterity_goodness = assign_ability_scores("Dexterity")
-    Constitution_goodness = assign_ability_scores("Constitution")
-    Intelligence_goodness = assign_ability_scores("Intelligence")
-    Wisdom_goodness = assign_ability_scores("Wisdom")
-    Charisma_goodness = assign_ability_scores("Charisma")
     while current_cr <= high_cr:
         if current_cr == 1:
             CR = current_cr
@@ -219,12 +230,6 @@ def print_stats():
         Wisdom_mod = math.floor((Wisdom - 10) / 2)
         Charisma_mod = math.floor((Charisma - 10) / 2)
         # Generate saving throws
-        Strength_prof = proficiency("Strength")
-        Dexterity_prof = proficiency("Dexterity")
-        Constitution_prof = proficiency("Constitution")
-        Intelligence_prof = proficiency("Intelligence")
-        Wisdom_prof = proficiency("Wisdom")
-        Charisma_prof = proficiency("Charisma")
         if Strength_prof.lower() == "y":
             Strength_save = roundhalf(Strength_mod + Proficiency)
         else:
@@ -249,10 +254,8 @@ def print_stats():
             Charisma_save = roundhalf(Charisma_mod + Proficiency)
         else:
             Charisma_save = roundhalf(Charisma_mod)
-        print("\nGenerating...")
-        print("\n----------------------------------------\n")
         
-        print("Challenge Rating " + str(current_cr))
+        print(Back.BLUE + Fore.RED + "Challenge Rating " + str(current_cr) + Style.RESET_ALL)
         
         print (Fore.GREEN + "\nGeneral Statistics:" + Style.RESET_ALL)
         print ("AC =", roundhalf(AC), "(+/-) 3")
@@ -269,12 +272,12 @@ def print_stats():
 
         print (Fore.GREEN + "Saving Throws:" + Style.RESET_ALL)
         print (Fore.YELLOW + "Bad saving throws are arbitrary.  This is only a suggestion." + Style.RESET_ALL)
-        print ("Strength = ", roundhalf(Strength_save), "       (+/-) 1")
-        print ("Dexterity = ", roundhalf(Dexterity_save), "      (+/-) 1")
-        print ("Constitution = ", roundhalf(Constitution_save), "   (+/-) 1")
-        print ("Intelligence = ", roundhalf(Intelligence_save), "   (+/-) 1")
-        print ("Wisdom = ", roundhalf(Wisdom_save), "         (+/-) 1")
-        print ("Charisma = ", roundhalf(Charisma_save), "       (+/-) 1\n")
+        print ("Strength = ", roundhalf(Strength_save), "          (+/-) 1")
+        print ("Dexterity = ", roundhalf(Dexterity_save), "         (+/-) 1")
+        print ("Constitution = ", roundhalf(Constitution_save), "      (+/-) 1")
+        print ("Intelligence = ", roundhalf(Intelligence_save), "      (+/-) 1")
+        print ("Wisdom = ", roundhalf(Wisdom_save), "            (+/-) 1")
+        print ("Charisma = ", roundhalf(Charisma_save), "          (+/-) 1\n")
         
         print (Fore.GREEN + "Ability Scores:" + Style.RESET_ALL)
         print (Fore.YELLOW + "Bad ability scores are arbitrary.  This is only a suggestion." + Style.RESET_ALL)
