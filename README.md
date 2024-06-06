@@ -1,4 +1,8 @@
-The current development branch is "0.1-dev".
+Written by Dane Mutters.
+
+Current development branch: 0.1-dev
+
+Current release branch: 0.1
 
 # 5emonstergenerator
 Scripts for generating Dungeons and Dragons 5th Edition monster stats.
