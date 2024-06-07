@@ -14,6 +14,7 @@ import platform
 import logging
 import re
 import os
+import subprocess
 
 # Make colorama work on Windows
 if platform.system() == "Windows":
@@ -52,6 +53,14 @@ print("-\"Good Save/Skill Bonus\" is the best save/skill bonus the monster has."
 print("-\"Average Save/Skill Bonus\" is a very rough estimate of most other saves/skills\nfor the monster.")
 print("-Most monsters have one or more \"Bad\" saves/skills.  How many they have and how\nbad they are is completely arbitrary.  In general, lower-CR monsters have a lot\nof bad saves/skills while higher-CR monsters have one or two.  This generator\nwill calculate approximate \"Bad\" saves/skills.")
 print("-To determine a skill's total bonus, simply add the Proficiency bonus to the \nassociated Ability Score.\n")
+
+# Clarify how XP works
+print(Fore.YELLOW + "A NOTE ABOUT XP:" + Style.RESET_ALL)
+print("XP is calculated based on a formula that approximates the values in official.")
+print("books.  Since official monster XP is somewhat arbitrary, the formula won't")
+print("always match official monsters at a given CR.  Arguably, this is more")
+print("consistent and therefore better than the official XP values, but if you don't")
+print("like that, feel free to ignore the provided XP value.\n")
 
 # TODO: Implement spreadsheet (.odt/.xls/.xlsx) output.
 
@@ -160,6 +169,21 @@ if log_to_file == 'y':
     logging.basicConfig(filename=log_file, level=logging.INFO, format='%(message)s')
 else:
     logging.basicConfig(level=logging.CRITICAL)  # Prevent logging if not desired
+
+# Function to call xp_by_cr.py and get the value of "xp"
+def get_xp(cr):
+    try:
+        # Run xp_by_cr.py with -n -c <cr> flags and capture the exit code
+        xp = subprocess.check_output(["./xp_by_cr.py", "-n", "-c", str(cr)], stderr=subprocess.STDOUT)
+        # Convert the exit code (bytes) to integer
+        xp = int(xp)
+        return xp
+    except subprocess.CalledProcessError as e:
+        # Print the exit status
+        print("Subprocess returned non-zero exit status:", e.returncode)
+        # Handle subprocess error
+        print("Subprocess error:", e)
+        return None
 
 # TODO: separate variable creation from printing; use loops on function calls instead.  
 
@@ -274,7 +298,7 @@ def print_stats():
 
         # Store output in a variable
         output = (
-            f"{Back.BLUE + Fore.RED}Challenge Rating {str(current_cr)}{Style.RESET_ALL}\n"
+            f"{Back.BLUE + Fore.RED}Challenge Rating {str(current_cr)} ({get_xp(CR)} XP){Style.RESET_ALL}\n"
             f"{Fore.GREEN}\nGeneral Statistics:{Style.RESET_ALL}\n"
             f"AC = {roundhalf(AC)} (+/-) 3\n"
             f"HP = {roundhalf(HP)} (+/-) {roundhalf(.5 * HP)}\n"
