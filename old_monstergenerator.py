@@ -11,9 +11,7 @@ import signal
 import math
 from colorama import Fore, Back, Style
 import platform
-import logging
-import re
-import os
+
 
 # Make colorama work on Windows
 if platform.system() == "Windows":
@@ -28,7 +26,7 @@ def sigint_handler(signal, frame):
 
 # Execute cigint_handler when CTRL+C is pressed on Mac/Linux
 signal.signal(signal.SIGINT, sigint_handler)
-
+    
 # Make rounding work the way we learned in elementary school
 def roundhalf(val):
     if (float(val) % 1) >= 0.5:
@@ -53,7 +51,9 @@ print("-\"Average Save/Skill Bonus\" is a very rough estimate of most other save
 print("-Most monsters have one or more \"Bad\" saves/skills.  How many they have and how\nbad they are is completely arbitrary.  In general, lower-CR monsters have a lot\nof bad saves/skills while higher-CR monsters have one or two.  This generator\nwill calculate approximate \"Bad\" saves/skills.")
 print("-To determine a skill's total bonus, simply add the Proficiency bonus to the \nassociated Ability Score.\n")
 
-# TODO: Implement spreadsheet (.odt/.xls/.xlsx) output.
+# TODO: Ask user whether to output to stdout, text file, or spreadsheet file (ods)
+# TODO: If user chooses output to file, ask for location (default ./)
+# TODO: Detect existing file and ask user whether to move them or overwrite
 
 # Get desired monster generation range
 # TODO: implement CR 0, 1/8, 1/4, and 1/2
@@ -131,7 +131,7 @@ Charisma_goodness = assign_ability_scores("Charisma")
 def proficiency(ability):
     prof = str(input(Fore.GREEN + "\nWill " + ability + " have saving throw proficiency? (Y/N) " + Style.RESET_ALL))
     if not prof.lower() in ["y", "n"]:
-        print(Fore.RED + "\nPlease choose \"Y\" or \"N\"." + Style.RESET_ALL)
+        print(Fore.RED + "\n Please choose \"Y\" or \"N\"." + Style.RESET_ALL)
         print("Exiting.")
         exit(1)        
     return prof.lower()
@@ -143,27 +143,10 @@ Intelligence_prof = proficiency("Intelligence")
 Wisdom_prof = proficiency("Wisdom")
 Charisma_prof = proficiency("Charisma")
 
-# Function to strip color codes
-def strip_color_codes(text):
-    ansi_escape = re.compile(r'\x1B[@-_][0-?]*[ -/]*[@-~]')
-    return ansi_escape.sub('', text)
-
-# Ask the user if they want logging and set up the logger if they do
-log_to_file = input(Fore.GREEN + "\nDo you want to log the output to a file? (Y/N) " + Style.RESET_ALL).lower()
-if not log_to_file.lower() in ["y", "n"]:
-    print(Fore.RED + "\nPlease choose \"Y\" or \"N\"." + Style.RESET_ALL)
-    print("Exiting.")
-    exit(1)
-if log_to_file == 'y':
-    log_file = input(Fore.GREEN + "Enter the log file name (default: monsters.txt): " + Style.RESET_ALL) or 'monsters.txt'
-    log_file = os.path.expandvars(os.path.expanduser(log_file))  # expand ~ and $HOME
-    logging.basicConfig(filename=log_file, level=logging.INFO, format='%(message)s')
-else:
-    logging.basicConfig(level=logging.CRITICAL)  # Prevent logging if not desired
 
 # TODO: separate variable creation from printing; use loops on function calls instead.  
 
-# Define variables, print results
+# Define variables, printresults
 print("\nGenerating...")
 print("\n----------------------------------------\n")
 
@@ -271,48 +254,48 @@ def print_stats():
             Charisma_save = roundhalf(Charisma_mod + Proficiency)
         else:
             Charisma_save = roundhalf(Charisma_mod)
+        
+        print(Back.BLUE + Fore.RED + "Challenge Rating " + str(current_cr) + Style.RESET_ALL)
+        
+        print(Fore.GREEN + "\nGeneral Statistics:" + Style.RESET_ALL)
+        print("AC =", roundhalf(AC), "(+/-) 3")
+        print("HP =", roundhalf(HP), "(+/-)", roundhalf(.5 * HP))
+        print("Proficiency Bonus =", Proficiency)
+        print("Attack Bonus =", roundhalf(Attack), "(+/-) 2")
+        print("Damage Per Round (one attack or multiattack total) =", roundhalf(Damage), "(+/-)", roundhalf(.5 * Damage))
+        print("Multi-Target Attack (one attack or multiattack total) = ", roundhalf(.5 * Damage), "(+/-)", roundhalf(.25 * Damage))
+        print("Single-Target Limited-Use Attack = ", roundhalf(2 * Damage), "(+/-)", roundhalf(Damage))
+        print("Multi-Target Limited-Use Attack = ", roundhalf(Damage), "(+/-)", roundhalf(.5 * Damage))
+        print("Save DC =", roundhalf(DC), "(+/-) 2\n")
+        #print("Good Skill Bonus =", roundhalf(GoodSave), "(+/-) 1")
+        #print("Average Skill Bonus =", roundhalf(AverageSave), "(+/-) 1\n")
 
-        # Store output in a variable
-        output = (
-            f"{Back.BLUE + Fore.RED}Challenge Rating {str(current_cr)}{Style.RESET_ALL}\n"
-            f"{Fore.GREEN}\nGeneral Statistics:{Style.RESET_ALL}\n"
-            f"AC = {roundhalf(AC)} (+/-) 3\n"
-            f"HP = {roundhalf(HP)} (+/-) {roundhalf(.5 * HP)}\n"
-            f"Proficiency Bonus = {Proficiency}\n"
-            f"Attack Bonus = {roundhalf(Attack)} (+/-) 2\n"
-            f"Damage Per Round (one attack or multiattack total) = {roundhalf(Damage)} (+/-) {roundhalf(.5 * Damage)}\n"
-            f"Multi-Target Attack (one attack or multiattack total) = {roundhalf(.5 * Damage)} (+/-) {roundhalf(.25 * Damage)}\n"
-            f"Single-Target Limited-Use Attack = {roundhalf(2 * Damage)} (+/-) {roundhalf(Damage)}\n"
-            f"Multi-Target Limited-Use Attack = {roundhalf(Damage)} (+/-) {roundhalf(.5 * Damage)}\n"
-            f"Save DC = {roundhalf(DC)} (+/-) 2\n"
-            f"\n"
-            f"{Fore.GREEN}Saving Throws (+/-) 1:{Style.RESET_ALL}\n"
-            f"{Fore.YELLOW}Bad saving throws are arbitrary. This is only a suggestion.{Style.RESET_ALL}\n"
-            f"Strength = {roundhalf(Strength_save)}\n"
-            f"Dexterity = {roundhalf(Dexterity_save)}\n"
-            f"Constitution = {roundhalf(Constitution_save)}\n"
-            f"Intelligence = {roundhalf(Intelligence_save)}\n"
-            f"Wisdom = {roundhalf(Wisdom_save)}\n"
-            f"Charisma = {roundhalf(Charisma_save)}\n"
-            f"\n"
-            f"{Fore.GREEN}Ability Scores (+/-) 2 (1):{Style.RESET_ALL}\n"
-            f"{Fore.YELLOW}Bad ability scores are arbitrary. This is only a suggestion.{Style.RESET_ALL}\n"
-            f"Strength = {Strength} ({Strength_mod})\n"
-            f"Dexterity = {Dexterity} ({Dexterity_mod})\n"
-            f"Constitution = {Constitution} ({Constitution_mod})\n"
-            f"Intelligence = {Intelligence} ({Intelligence_mod})\n"
-            f"Wisdom = {Wisdom} ({Wisdom_mod})\n"
-            f"Charisma = {Charisma} ({Charisma_mod})\n"
-            f"\n----------------------------------------\n"
-        )
-
-        print(output)  # Print the stored output
-
-        if log_to_file == 'y':  # Log the output if logging is enabled
-            logging.info(strip_color_codes(output))
-            print("New monster stats have been appended to the output file.")
+        print(Fore.GREEN + "Saving Throws:" + Style.RESET_ALL)
+        print(Fore.YELLOW + "Bad saving throws are arbitrary.  This is only a suggestion." + Style.RESET_ALL)
+        print("Strength = ", roundhalf(Strength_save), "          (+/-) 1")
+        print("Dexterity = ", roundhalf(Dexterity_save), "         (+/-) 1")
+        print("Constitution = ", roundhalf(Constitution_save), "      (+/-) 1")
+        print("Intelligence = ", roundhalf(Intelligence_save), "      (+/-) 1")
+        print("Wisdom = ", roundhalf(Wisdom_save), "            (+/-) 1")
+        print("Charisma = ", roundhalf(Charisma_save), "          (+/-) 1\n")
+        
+        print(Fore.GREEN + "Ability Scores:" + Style.RESET_ALL)
+        print(Fore.YELLOW + "Bad ability scores are arbitrary.  This is only a suggestion." + Style.RESET_ALL)
+        print("Strength = ", Strength, " (", Strength_mod, ")       ", "(+/-) 2 (1)", sep='')
+        print("Dexterity = ", Dexterity, " (", Dexterity_mod, ")      ", "(+/-) 2 (1)", sep='')
+        print("Constitution = ", Constitution, " (", Constitution_mod, ")   ", "(+/-) 2 (1)", sep='')
+        print("Intelligence = ", Intelligence, " (", Intelligence_mod, ")   ", "(+/-) 2 (1)", sep='')
+        print("Wisdom = ", Wisdom, " (", Wisdom_mod, ")         ", "(+/-) 2 (1)", sep='')
+        print("Charisma = ", Charisma, " (", Charisma_mod, ")       ", "(+/-) 2 (1)", sep='')
+        print("\n----------------------------------------\n")
 
         current_cr += 1
 
+# Call generation functions
 print_stats()
+print("Done.  Press ENTER to Exit.\n")
+input()
+exit(0)
+
+# TODO: after separting variable creation from printing, use variables to output to files at afore-specified path, moving files if requested
 
