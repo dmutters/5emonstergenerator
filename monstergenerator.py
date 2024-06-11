@@ -174,7 +174,8 @@ else:
 def get_xp(cr):
     try:
         # Run xp_by_cr.py with -n -c <cr> flags and capture the exit code
-        xp = subprocess.check_output(["./xp_by_cr.py", "-n", "-c", str(cr)], stderr=subprocess.STDOUT)
+        #xp = subprocess.check_output(["./xp_by_cr.py", "-n", "-c", str(CR)], stderr=subprocess.STDOUT)
+        xp = subprocess.check_output([sys.executable, "xp_by_cr.py", "-n", "-c", str(cr)], stderr=subprocess.STDOUT)
         # Convert the exit code (bytes) to integer
         xp = int(xp)
         return xp
@@ -335,8 +336,10 @@ def print_stats():
         if log_to_file == 'y':  # Log the output if logging is enabled
             logging.info(strip_color_codes(output))
             print("New monster stats have been appended to the output file.")
+            print("\n----------------------------------------\n")
 
         current_cr += 1
 
 print_stats()
 
+print(input("Press ENTER to exit."))
