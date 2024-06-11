@@ -174,7 +174,8 @@ else:
 def get_xp(cr):
     try:
         # Run xp_by_cr.py with -n -c <cr> flags and capture the exit code
-        xp = subprocess.check_output(["./xp_by_cr.py", "-n", "-c", str(cr)], stderr=subprocess.STDOUT)
+        #xp = subprocess.check_output(["./xp_by_cr.py", "-n", "-c", str(CR)], stderr=subprocess.STDOUT)
+        xp = subprocess.check_output([sys.executable, "xp_by_cr.py", "-n", "-c", str(cr)], stderr=subprocess.STDOUT)
         # Convert the exit code (bytes) to integer
         xp = int(xp)
         return xp
@@ -340,3 +341,4 @@ def print_stats():
 
 print_stats()
 
+print(input("Press ENTER to exit."))

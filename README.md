@@ -59,7 +59,7 @@ Make the script executable:
 ### WINDOWS
 Go here and download the latest "Windows installer (64-bit)".
 https://www.python.org/downloads/windows/
-Run the installer.  Install it with administrator privileges for all users and add it to the PATH if prompted to do so.
+Run the installer.  Install it with administrator privileges for all users and add it to the PATH when prompted to do so.  Disable the PATH length limit if prompted to do so.
 Then execute this in a CMD or Powershell window:
 
 ```pip install colorama```
