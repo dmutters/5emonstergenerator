@@ -336,6 +336,7 @@ def print_stats():
         if log_to_file == 'y':  # Log the output if logging is enabled
             logging.info(strip_color_codes(output))
             print("New monster stats have been appended to the output file.")
+            print("\n----------------------------------------\n")
 
         current_cr += 1
 
